@@ -33,6 +33,6 @@ setup(
 	],
 	packages=["pylazaro"],
 	include_package_data=True,
-	# dependency_links = ["git+https://github.com/ConstantineLignos/quickvec.git#egg=quickvec"],
-	install_requires=["flair", "attrs", "quickvec"],
+	dependency_links = ["git+https://github.com/ConstantineLignos/quickvec.git#egg=quickvec==0.2.0.dev0"],
+	install_requires=["flair", "attrs"],
 )
