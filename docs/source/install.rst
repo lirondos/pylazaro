@@ -12,7 +12,7 @@ To install ``pylazaro``, you need to run the following commands:
 
    $ pip install git+https://github.com/ConstantineLignos/quickvec.git
    $ pip install pylazaro
-   $ python -m pylazaro download
+   $ python -m pylazaro
 
 The last command will download several files (model files, embeddings) that are required by
 ``pylazaro``. Please bare in mind that these files may take a while to download and install.
@@ -32,6 +32,6 @@ However, if you wish to run ``pylazaro`` using these larger models run the follo
 
    $ pip install git+https://github.com/ConstantineLignos/quickvec.git
    $ pip install pylazaro
-   $ python -m pylazaro download larger
+   $ python -m pylazaro larger
 
 

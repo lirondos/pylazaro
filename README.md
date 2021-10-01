@@ -5,7 +5,7 @@ A library for lexical borrowing detection (a.k.a loanwords) in Spanish.
 ```
    pip install git+https://github.com/ConstantineLignos/quickvec.git
    pip install pylazaro
-   python -m pylazaro download 
+   python -m pylazaro 
    ```
 
 ### Get started
