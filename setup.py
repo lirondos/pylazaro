@@ -15,7 +15,7 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 # This call to setup() does all the work
 setup(
 	name="pylazaro",
-	version="0.1.33",
+	version="0.1.34",
 	description="A Python library for lexical borrowing detection",
 	long_description_content_type="text/markdown",
 	long_description=long_description,
@@ -33,6 +33,5 @@ setup(
 	],
 	packages=["pylazaro"],
 	include_package_data=True,
-	dependency_links = ["git+https://github.com/ConstantineLignos/quickvec.git#egg=quickvec==0.2.0.dev0"],
 	install_requires=["flair", "attrs"],
 )

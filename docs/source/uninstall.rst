@@ -1,10 +1,11 @@
+============
 Uninstalling
 ============
 
 .. _installation:
 
 How to uninstall
-----------------
+============================
 
 To uninstall ``pylazaro``, simply run:
 

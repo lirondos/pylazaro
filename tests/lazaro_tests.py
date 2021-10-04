@@ -26,15 +26,15 @@ class LazaroCRFTestCase(unittest.TestCase):
 		self.assertIsInstance(self.prediction, LazaroOutputCRF)
 
 	def test_get_borrowings(self):
-		self.assertEqual(self.prediction.get_borrowings(), [("app", 'ENG')])
+		self.assertEqual(self.prediction.borrowings(), [("app", 'ENG')])
 
 	def test_get_anglicisms(self):
-		self.assertEqual(self.prediction.get_borrowings(), [("app", 'ENG')])
+		self.assertEqual(self.prediction.borrowings(), [("app", 'ENG')])
 
 	def test_get_tuples(self):
 		expected_result = [("La", 'O'), ("'", 'O'), ("app", 'B-ENG'), ("'", 'O'), ("fue", 'O'),
 																		("un", 'O'), ("éxito", 'O')]
-		self.assertEqual(self.prediction.get_tuples(), expected_result)
+		self.assertEqual(self.prediction.tag_per_token(), expected_result)
 
 
 class LazaroFlairTestCase(unittest.TestCase):
@@ -51,15 +51,15 @@ class LazaroFlairTestCase(unittest.TestCase):
 		self.assertIsInstance(self.prediction, LazaroOutputFlair)
 
 	def test_get_borrowings(self):
-		self.assertEqual(self.prediction.get_borrowings(), [("app", 'ENG')])
+		self.assertEqual(self.prediction.borrowings(), [("app", 'ENG')])
 		
 	def test_get_borrowings(self):
-		self.assertEqual(self.prediction.get_anglicisms(), [("app", 'ENG')])
+		self.assertEqual(self.prediction.anglicisms(), [("app", 'ENG')])
 
 	def test_get_tuples(self):
 		expected_result = [("La", 'O'), ("'", 'O'), ("app", 'B-ENG'), ("'", 'O'), ("fue", 'O'),
 																		("un", 'O'), ("éxito", 'O')]
-		self.assertEqual(self.prediction.get_tuples(), expected_result)
+		self.assertEqual(self.prediction.tag_per_token(), expected_result)
 
 if __name__ == '__main__':
 	unittest.main()
