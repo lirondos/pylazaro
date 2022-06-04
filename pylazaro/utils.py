@@ -665,8 +665,7 @@ def download(model_url, dir_name, filename):
 	dir_to_save = Path(os.path.dirname(os.path.realpath(__file__)), dir_name)
 	if not os.path.exists(dir_to_save):
 		os.makedirs(dir_to_save)
-	logging.info("Preparing to download model... (this only needs to happen the first time "
-	             "you import the model)")
+	logging.info("Preparing to download " + filename + "... (this only needs to happen the first time you import the model)")
 	path_to_file = Path(dir_to_save, filename)
 	fetch_file(model_url, path_to_file)
 

@@ -1,7 +1,7 @@
 import attr
 import pathlib
 import logging
-from pylazaro.classifiers import LazaroClassifier, CRFClassifier, FlairClassifier
+from pylazaro.classifiers import LazaroClassifier, CRFClassifier, FlairClassifier, TransformersClassifier
 from pylazaro.outputs import LazaroOutput
 
 logging.getLogger("transformers").setLevel(logging.ERROR)
@@ -14,20 +14,32 @@ logging.basicConfig(level=logging.INFO)
 temp = pathlib.PosixPath
 pathlib.PosixPath = pathlib.WindowsPath
 
-
 @attr.s
 class Lazaro(object):
-	model_type = attr.ib(type=str, default="crf", validator=attr.validators.in_(["crf", "flair"]))
-	model_file = attr.ib(type=str, default=None)
-	classifier = attr.ib(validator=attr.validators.instance_of(LazaroClassifier))
+	"""The tagger object that will label words as being borrowings or not
 
-	@classifier.default
-	def get_classifier(self) -> LazaroClassifier:
+	Attributes:
+		model_type (str, optional): type of model.
+		model_file (str, optional): model to be used.
+		_classifier (:obj:`pylazaro.classifiers.LazaroClassifier` optional)
+
+	"""
+
+	model_type = attr.ib(type=str, default="bilstm", validator=attr.validators.in_(["crf", "bilstm", "transformers"]))
+	model_file = attr.ib(type=str, default=None)
+	_classifier = attr.ib(validator=attr.validators.instance_of(LazaroClassifier))
+
+	@_classifier.default
+	def _get_classifier(self) -> LazaroClassifier:
+		"""Sets the classifier model according to the model_type attribute (bilstm/transformers/crf).
+		This is a private method that is automatically called upon the Lazaro object creation
+
+		Returns:
+			`pylazaro.classifiers.LazaroClassifier`: The LazaroClassifier (FlairClassifier or CRFClassifier).
+
 		"""
-		Sets the classifier model according to the model_type attribute (flair/crf)
-		:return: a LazaroClassifier (FlairClassifier or CRFClassifier)
-		"""
-		if self.model_type == 'flair':
+
+		if self.model_type == 'bilstm':
 			if self.model_file:
 				return FlairClassifier(model_file=self.model_file)
 			return FlairClassifier()
@@ -35,6 +47,30 @@ class Lazaro(object):
 			if self.model_file:
 				return CRFClassifier(model_file=self.model_file)
 			return CRFClassifier()
+		elif self.model_type == 'transformers':
+			if self.model_file:
+				return TransformersClassifier(model_file=self.model_file)
+			return TransformersClassifier()
 
 	def analyze(self, text: str) -> LazaroOutput:
-		return self.classifier.predict(text)
+		"""The method that calls the tagger on a given text to detect borrowings.
+
+		Args:
+			text (str): The text that we want to analyze for borrowings
+
+		Returns:
+			`pylazaro.classifiers.LazaroOutput`: The LazaroOutput object that contains the output produced by Lazaro tagger (the output where the automatic detection of borrowings is stored)
+
+		Example:
+			.. code-block:: python
+
+				>>> from pylazaro import Lazaro
+				>>> tagger = Lazaro()
+				>>> text = "Fue un look sencillo. Se celebra un festival de 'anime'."
+				>>> output = tagger.analyze(text)
+				>>> output.borrowings()
+				[('look', 'ENG'), ('anime', 'OTHER')]`
+
+		"""
+
+		return self._classifier.predict(text)

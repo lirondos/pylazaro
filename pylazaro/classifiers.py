@@ -1,7 +1,7 @@
 from flair.models import SequenceTagger
+from flair.data import Sentence
 from typing import List
 import attr
-from flair.embeddings import StackedEmbeddings, CharacterEmbeddings, TransformerWordEmbeddings, BytePairEmbeddings
 import logging
 import spacy
 from spacy.language import Language
@@ -10,14 +10,19 @@ import pycrfsuite
 from spacy.lang.tokenizer_exceptions import URL_PATTERN
 from pylazaro.utils import WindowedTokenFeatureExtractor, CRFsuiteEntityRecognizer_CoNLL
 from pylazaro.utils import BiasFeature, TokenFeature, UppercaseFeature, TitlecaseFeature, \
-	TrigramFeature, QuotationFeature, WordEnding, POStagFeature, WordShapeFeature, WordVectorFeatureNerpy, URLFeature, \
-	EmailFeature, TwitterFeature
+	TrigramFeature, QuotationFeature, WordEnding, POStagFeature, WordShapeFeature, WordVectorFeatureNerpy, URLFeature, EmailFeature, TwitterFeature
 import re
 from spacy.training import biluo_tags_to_spans
 from abc import ABC, abstractmethod
 from .constants import *
-from pylazaro.outputs import LazaroOutput, LazaroOutputFlair, LazaroOutputCRF
+from pylazaro.outputs import LazaroOutput, LazaroOutputFlair, LazaroOutputCRF, LazaroOutputTransformers
+from transformers import pipeline, AutoModelForTokenClassification, AutoTokenizer
+import pathlib
+import torch
 
+if os.name == 'nt':
+	temp = pathlib.PosixPath
+	pathlib.PosixPath = pathlib.WindowsPath
 
 class LazaroClassifier(ABC):
 
@@ -32,35 +37,50 @@ class LazaroClassifier(ABC):
 
 @attr.s
 class FlairClassifier(LazaroClassifier):
-	model_file = attr.ib(default="bert-beto-bpe-char.pt", validator=attr.validators.instance_of(
-		str))
+	model_name = attr.ib(type=str, default=FLAIR_DEFAULT_MODEL)
 	model = attr.ib()
 
 	@model.default
 	def load_model(self):
-		path_to_model = Path(PATH_TO_MODELS_DIR, self.model_file)
-		logging.info("Loading model... (this may take a while)")
-		classifier = SequenceTagger.load(path_to_model.as_posix())
-		classifier.embeddings = StackedEmbeddings(
-		[
-			CharacterEmbeddings(),
-			TransformerWordEmbeddings('dccuchile/bert-base-spanish-wwm-cased'),
-			TransformerWordEmbeddings('bert-base-cased'),
-			BytePairEmbeddings('en'),
-			BytePairEmbeddings('es'),
-		])
-		logging.info("Model loaded!")
-		return classifier
+		tagger = SequenceTagger.load(self.model_name)
+		return tagger
 
 	def predict(self, text: str) -> LazaroOutputFlair:
-		sentence = LazaroOutputFlair(text)
-		self.model.predict(sentence.output)
+		sentence = Sentence(text)
+		self.model.predict(sentence)
+		sentence = LazaroOutputFlair(sentence)
 		return sentence
+
+
+@attr.s
+class TransformersClassifier(LazaroClassifier):
+	model_name = attr.ib(type=str, default=TRANSFORMERS_DEFAULT_MODEL)
+	model = attr.ib()
+	tokenizer = attr.ib()
+
+	@model.default
+	def load_model(self) -> AutoModelForTokenClassification:
+		model = AutoModelForTokenClassification.from_pretrained(self.model_name)
+		return model
+
+	@tokenizer.default
+	def load_tokenizer(self) -> AutoTokenizer:
+		tokenizer = AutoTokenizer.from_pretrained(self.model_name, do_lower_case=False)
+		return tokenizer
+
+
+	def predict(self, text: str) -> LazaroOutputTransformers:
+		inputs = self.tokenizer(text, return_tensors="pt")
+		tokens = inputs.tokens()
+		outputs = self.model(**inputs).logits
+		predictions = torch.argmax(outputs, dim=2)
+		output = [(token, self.model.config.id2label[prediction]) for token, prediction in zip(tokens, predictions[0].numpy())]
+		return LazaroOutputTransformers(output)
+
 
 @attr.s
 class CRFClassifier(LazaroClassifier):
-	model_file = attr.ib(default=CRF_FILENAME, validator=attr.validators.instance_of(
-		str))
+	model_file = attr.ib(default=CRF_FILENAME, validator=attr.validators.instance_of(str))
 	model = attr.ib()
 	spacy_model = attr.ib()
 
@@ -70,7 +90,7 @@ class CRFClassifier(LazaroClassifier):
 		logging.info("Loading model... (this may take a while)")
 		window_size = 2
 		features = [
-			WordVectorFeatureNerpy("w2v"),
+			WordVectorFeatureNerpy("w2v", scaling=0.5),
 			BiasFeature(),
 			TokenFeature(),
 			UppercaseFeature(),
@@ -91,7 +111,7 @@ class CRFClassifier(LazaroClassifier):
 
 	@spacy_model.default
 	def load_spacy(self) -> Language:
-		spacy_model = spacy.load('es_core_news_md', exclude=["ner", "parser"])
+		spacy_model = spacy.load('es_core_news_md', exclude=["ner"])
 		spacy_model.tokenizer = CRFClassifier.custom_tokenizer(spacy_model)
 		return spacy_model
 
@@ -105,8 +125,7 @@ class CRFClassifier(LazaroClassifier):
 		return LazaroOutputCRF(doc)
 
 	@staticmethod
-	@staticmethod
-	def to_biluo(tags):
+	def to_biluo(tags: List[str]) -> List[str]:
 		new_tags = []
 		for i, tag in enumerate(tags):
 			if tag.startswith("B"):

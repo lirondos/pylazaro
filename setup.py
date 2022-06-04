@@ -15,8 +15,8 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 # This call to setup() does all the work
 setup(
 	name="pylazaro",
-	version="0.1.34",
-	description="A Python library for lexical borrowing detection",
+	version="1.0.0",
+	description="A Python library for detecting lexical borrowings (with a focus on anglicisms in Spanish language)",
 	long_description_content_type="text/markdown",
 	long_description=long_description,
 	url="https://pylazaro.readthedocs.io/",
@@ -28,10 +28,9 @@ setup(
 		"License :: OSI Approved :: MIT License",
 		"Programming Language :: Python :: 3.6",
 		"Programming Language :: Python :: 3.7",
-		"Programming Language :: Python :: 3.8",
 		"Operating System :: OS Independent"
 	],
 	packages=["pylazaro"],
 	include_package_data=True,
-	install_requires=["flair", "attrs"],
+	install_requires=["transformers", "flair", "attrs", "torch", "torchvision"],
 )

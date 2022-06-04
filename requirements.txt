@@ -1,3 +1,4 @@
-flair
+flair>=0.1.0
 attrs
 git+https://github.com/ConstantineLignos/quickvec.git
+transformers

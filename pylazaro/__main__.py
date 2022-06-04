@@ -8,15 +8,17 @@ temp = pathlib.PosixPath
 pathlib.PosixPath = pathlib.WindowsPath
 
 def main():
-	download_crf()
-	download_embeddings()
-	if len(sys.argv)>1 and sys.argv[1] == "flair":
-		download_flair()
+	if len(sys.argv)>1 and sys.argv[1] == "extended":
+		download_crf()
+		download_embeddings()
+		logging.info("Done downloading!")
+		#download_flair()
+
 
 def download_crf():
 	if not os.path.exists(PATH_TO_CRF_MODEL):
 		logging.info("Preparing to download model...")
-		download(URL_TO_FLAIR_MODEL, "models", CRF_FILENAME)
+		download(URL_TO_CRF_MODEL, "models", CRF_FILENAME)
 	else:
 		print(PATH_TO_CRF_MODEL)
 
@@ -48,8 +50,8 @@ def download_flair():
 		download(URL_TO_FLAIR_MODEL, "models", FLAIR_MODEL)
 	else:
 		print(PATH_TO_FLAIR_MODEL)
-"""
+
 if __name__ == "__main__":
 	main()
-"""
+
 
