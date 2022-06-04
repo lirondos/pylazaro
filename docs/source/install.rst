@@ -7,36 +7,47 @@ Installation guide
 How to install
 ==============
 
-To install ``pylazaro``, you need to run the following commands:
+To install ``pylazaro``, you simply need to run the following command:
 
 .. code-block:: console
 
-   $ pip install git+https://github.com/ConstantineLignos/quickvec.git
    $ pip install pylazaro
-   $ python -m pylazaro
 
-The last command will download several files (model files, embeddings) that are required by
-``pylazaro``. Please bear in mind that these files may take a while to download and install.
+
 
 Extended installation
 ======================
 
-There is an extended version of ``pylazaro`` that runs on larger models. These
-larger models may produce better results than the basic models but will also take up more space
-and will take
-longer to run and to install.
+There is an extended installation option for ``pylazaro``. This extended installation is needed if you want to run the CRF model for Lazaro (see section 3.1 from `this paper  <https://aclanthology.org/2022.acl-long.268/>`_). However, it is unlikely that you will ever need to run that model, as the CRF model is the worst performing model of all models offered through the library. The extended installation is probably only useful for research or development uses, but not for final users.
+
+If you still wish to install the extended version, see below the commands you need to run. 
 
 .. warning::
-    This extended installation will take up more memory space and will take longer to run. The
-    basic models should suit most use cases and we recommend that you stick to the basic
+    This extended installation will take up more memory space and will take some time to install. The
+    basic installation should suit most use cases and we recommend that you stick to the basic
     installation whenever possible.
-
-However, if you wish to run ``pylazaro`` using these larger models run the following commands:
 
 .. code-block:: console
 
    $ pip install git+https://github.com/ConstantineLignos/quickvec.git
    $ pip install pylazaro
-   $ python -m pylazaro larger
+   $ python -m pylazaro extended
+
+How to uninstall
+============================
+
+To uninstall ``pylazaro``, simply run:
+
+.. code-block:: console
+
+   $ pip uninstall pylazaro
+   
+
+If you installed the extended version, running ``pip unistall pylazaro`` will not suffice. You will also need to navigate to ``pylazaro``'s package folder and in your ``site-package`` folder and remove all remaining files (model and embeddings).
+
+.. code-block:: console
+
+   $ rm -r site-package/pylazaro
+
 
 
