@@ -44,11 +44,9 @@ Where can I check the code, the models or the data behind ``pylazaro``?
 -----------------------------------------------------------------------------------------------
 * The code behind ``pylazaro`` is available on `GitHub <https://github.com/lirondos/pylazaro>`_.
 * The dataset used to train ``pylazaro`` is the `COALAS corpus <https://github.com/lirondos/coalas>`_.
-* The two best-performing models behind ``pylazaro`` are also available through `HuggingFace model hub <https://huggingface.co/models?other=arxiv:2203.16169>`_
+* The two best-performing models behind ``pylazaro`` are also available through `HuggingFace model hub <https://huggingface.co/models?other=arxiv:2203.16169>`_.
 * The paper that describes the creation of the dataset and models is available in the `ACL anthology <https://aclanthology.org/2022.acl-long.268/>`_.
-
-
-Maybe. The models behind ``pylazaro`` have been trained and tuned for detecting a particular type of borrowing (unassimilated anglicisms) in a very specific setting (Spanish newspaper articles). If your use case is similar to that,  ``pylazaro`` may be suitable. 
+ 
 
 
 Why is it called `pylazaro`?
