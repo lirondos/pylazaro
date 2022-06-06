@@ -21,14 +21,25 @@ sys.path.insert(0, os.path.abspath('../..'))
 # -- Project information -----------------------------------------------------
 
 project = 'pylazaro'
-copyright = '2022, Elena Álvarez-Mellado'
-author = 'Elena Álvarez-Mellado'
+year = datetime.now().year
+copyright = u"%d Elena Álvarez-Mellado" % year
 
 # The full version, including alpha/beta/rc tags
 release = '1.0.0'
 
 
 # -- General configuration ---------------------------------------------------
+html_theme_options = {
+    "description": "Automatic detection of anglicisms (and other lexical borrowings)",
+    "github_user": "lirondos",
+    "github_repo": "pylazaro",
+    "github_button": True,
+    "fixed_sidebar": True,
+    "warn_bg": "#ffedcc",
+    "note_bg": "#e7f2fa"
+}
+
+
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
