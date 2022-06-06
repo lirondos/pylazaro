@@ -2,3 +2,4 @@
 sphinx==4.2.0
 sphinx_rtd_theme==0.5.0
 pylazaro==1.0.0
+spacy
