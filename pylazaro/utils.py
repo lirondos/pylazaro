@@ -8,7 +8,7 @@ from collections import defaultdict
 from abc import ABC, abstractmethod
 import regex
 import re
-from quickvec import SqliteWordEmbedding
+#from quickvec import SqliteWordEmbedding
 from pathlib import Path
 import os
 import logging
@@ -16,19 +16,6 @@ import requests
 from tqdm import tqdm
 import bz2
 from .constants import *
-"""
-URL_TO_EMBEDDINGS = "http://cs.famaf.unc.edu.ar/~ccardellino/SBWCE/SBW-vectors-300-min5.txt.bz2"
-
-EMBEDDINGS_DB = "embeddings.db"
-EMBEDDINGS_COMPRESS = "embeddings.txt.bz2"
-EMBEDDINGS_DECOMPRESS = "embeddings.txt"
-
-PATH_TO_EMBEDDINGS_DIR =  Path(os.path.dirname(os.path.realpath(__file__)), "embeddings")
-PATH_TO_EMBEDDINGS_COMPRESS = Path(PATH_TO_EMBEDDINGS_DIR, EMBEDDINGS_COMPRESS)
-PATH_TO_EMBEDDINGS_DB = Path(PATH_TO_EMBEDDINGS_DIR, EMBEDDINGS_DB)
-PATH_TO_EMBEDDINGS_DECOMPRESS = Path(PATH_TO_EMBEDDINGS_DIR, EMBEDDINGS_DECOMPRESS)
-URL_TO_QUICKVEC = "https://github.com/ConstantineLignos/quickvec/archive/refs/heads/master.zip"
-"""
 
 UPPERCASE_RE = regex.compile(r"[\p{Lu}\p{Lt}]")
 LOWERCASE_RE = regex.compile(r"\p{Ll}")
