@@ -31,7 +31,7 @@ release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 html_theme_options = {
-    "description": "Automatic detection of anglicisms (and other lexical borrowings)",
+    "description": "Automatic detection of anglicisms in Spanish",
     "github_user": "lirondos",
     "github_repo": "pylazaro",
     "github_button": True,

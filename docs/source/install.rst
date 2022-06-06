@@ -14,7 +14,7 @@ To install ``pylazaro``, you simply need to run the following command:
    $ pip install pylazaro
 
 .. note::
-    `pylazaro` works best on Python 3.8. We don't recommend installing `pylazaro` on Python 3.10, as it may result on some incompatibilities (related to sentencepiece required by Torch).
+    ``pylazaro`` works best on Python 3.8. We don't recommend installing `pylazaro` on Python 3.10, as it may result on some incompatibilities (related to sentencepiece required by Torch).
 
 Extended installation
 ======================
