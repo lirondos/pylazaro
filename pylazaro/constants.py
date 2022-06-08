@@ -18,10 +18,14 @@ FLAIR_DEFAULT_MODEL = CS_MODEL
 MBERT_MODEL = "lirondos/anglicisms-spanish-mbert"
 TRANSFORMERS_DEFAULT_MODEL = MBERT_MODEL
 
-URL_TO_CRF_MODEL = "https://github.com/lirondos/pylazaro/releases/download/v0.1/crf.model"
+URL_TO_CRF_MODEL = (
+    "https://github.com/lirondos/pylazaro/releases/download/v0.1/crf.model"
+)
 CRF_FILENAME = "crf.model"
 PATH_TO_CRF_MODEL = Path(PATH_TO_MODELS_DIR, CRF_FILENAME)
 
-MODELS_DIR =  "models"
+MODELS_DIR = "models"
 
-URL_TO_EMBEDDINGS = "http://cs.famaf.unc.edu.ar/~ccardellino/SBWCE/SBW-vectors-300-min5.txt.bz2"
+URL_TO_EMBEDDINGS = (
+    "http://cs.famaf.unc.edu.ar/~ccardellino/SBWCE/SBW-vectors-300-min5.txt.bz2"
+)

@@ -1,4 +1,5 @@
-import sys 
+import sys
+
 from pylazaro import Lazaro
 
 model = sys.argv[1]
