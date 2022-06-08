@@ -1,4 +1,4 @@
-# Pylazaro
+# pylazaro
 A library for lexical borrowing detection (a.k.a loanwords) in Spanish, with a focus on anglicism detection.
 
 ### Installation
