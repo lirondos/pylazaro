@@ -1,11 +1,43 @@
+import os
+import sys
 import unittest
+
+sys.path.insert(0, os.path.abspath(".."))
+from spacy.language import Language
+
 from pylazaro import Lazaro
 from pylazaro.classifiers import *
-from pylazaro.utils import *
-from spacy.language import Language
 from pylazaro.outputs import *
+from pylazaro.utils import *
 
+EXAMPLE = "La 'app' de 'machine learning' fue un éxito en el festival de 'anime'"
+TAG_PER_TOKEN = [
+    ("La", "O"),
+    ("'", "O"),
+    ("app", "B-ENG"),
+    ("'", "O"),
+    ("de", "O"),
+    ("'", "O"),
+    ("machine", "B-ENG"),
+    ("learning", "I-ENG"),
+    ("'", "O"),
+    ("fue", "O"),
+    ("un", "O"),
+    ("éxito", "O"),
+    ("en", "O"),
+    ("el", "O"),
+    ("festival", "O"),
+    ("de", "O"),
+    ("'", "O"),
+    ("anime", "B-OTHER"),
+    ("'", "O"),
+]
 
+BORROWINGS = [("app", "ENG"), ("machine learning", "ENG"), ("anime", "OTHER")]
+ANGLICISMS = [("app", "ENG"), ("machine learning", "ENG")]
+OTHER = [("anime", "OTHER")]
+
+"""
 class LazaroCRFTestCase(unittest.TestCase):
 
 	def setUp(self):
@@ -35,55 +67,56 @@ class LazaroCRFTestCase(unittest.TestCase):
 		expected_result = [("La", 'O'), ("'", 'O'), ("app", 'B-ENG'), ("'", 'O'), ("fue", 'O'),
 																		("un", 'O'), ("éxito", 'O')]
 		self.assertEqual(self.prediction.tag_per_token(), expected_result)
+"""
 
 
 class LazaroFlairTestCase(unittest.TestCase):
+    def setUp(self):
+        self.lazaro = Lazaro(model_type="bilstm")
+        self.prediction = self.lazaro.analyze(EXAMPLE)
 
-	def setUp(self):
-		self.lazaro = Lazaro(model_type="flair")
-		self.text = "La 'app' fue un éxito"
-		self.prediction = self.lazaro.analyze(self.text)
+    def test_classifier_is_FlairClassifier(self):
+        self.assertIsInstance(self.lazaro._classifier, FlairClassifier)
 
-	def test_classifier_is_CRFClassifier(self):
-		self.assertIsInstance(self.lazaro._classifier, FlairClassifier)
+    def test_is_FlairOutput(self):
+        self.assertIsInstance(self.prediction, LazaroOutputFlair)
 
-	def test_crf_is_Flairoutput(self):
-		self.assertIsInstance(self.prediction, LazaroOutputFlair)
+    def test_borrowings(self):
+        self.assertEqual(self.prediction.borrowings(), BORROWINGS)
 
-	def test_get_borrowings(self):
-		self.assertEqual(self.prediction.borrowings(), [("app", 'ENG')])
-		
-	def test_get_borrowings(self):
-		self.assertEqual(self.prediction.anglicisms(), [("app", 'ENG')])
+    def test_anglicisms(self):
+        self.assertEqual(self.prediction.anglicisms(), ANGLICISMS)
 
-	def test_get_tuples(self):
-		expected_result = [("La", 'O'), ("'", 'O'), ("app", 'B-ENG'), ("'", 'O'), ("fue", 'O'),
-																		("un", 'O'), ("éxito", 'O')]
-		self.assertEqual(self.prediction.tag_per_token(), expected_result)
+    def test_other_borrowings(self):
+        self.assertEqual(self.prediction.other_borrowings(), OTHER)
+
+    def test_tag_per_token(self):
+        self.assertEqual(self.prediction.tag_per_token(), TAG_PER_TOKEN)
+
 
 class LazaroTransformersTestCase(unittest.TestCase):
+    def setUp(self):
+        self.lazaro = Lazaro(model_type="transformers")
+        self.prediction = self.lazaro.analyze(EXAMPLE)
 
-	def setUp(self):
-		self.lazaro = Lazaro(model_type="transformers")
-		self.text = "La 'app' fue un éxito"
-		self.prediction = self.lazaro.analyze(self.text)
+    def test_classifier_is_TransformersClassifier(self):
+        self.assertIsInstance(self.lazaro._classifier, TransformersClassifier)
 
-	def test_classifier_is_CRFClassifier(self):
-		self.assertIsInstance(self.lazaro._classifier, TransformersClassifier)
+    def test_is_TransformersOutput(self):
+        self.assertIsInstance(self.prediction, LazaroOutputTransformers)
 
-	def test_crf_is_Flairoutput(self):
-		self.assertIsInstance(self.prediction, LazaroOutputTransformers)
+    def test_borrowings(self):
+        self.assertEqual(self.prediction.borrowings(), BORROWINGS)
 
-	def test_get_borrowings(self):
-		self.assertEqual(self.prediction.borrowings(), [("app", 'ENG')])
-		
-	def test_get_borrowings(self):
-		self.assertEqual(self.prediction.anglicisms(), [("app", 'ENG')])
+    def test_anglicisms(self):
+        self.assertEqual(self.prediction.anglicisms(), ANGLICISMS)
 
-	def test_get_tuples(self):
-		expected_result = [("La", 'O'), ("'", 'O'), ("app", 'B-ENG'), ("'", 'O'), ("fue", 'O'),
-																		("un", 'O'), ("éxito", 'O')]
-		self.assertEqual(self.prediction.tag_per_token(), expected_result)
-        
-if __name__ == '__main__':
-	unittest.main()
+    def test_other_borrowings(self):
+        self.assertEqual(self.prediction.other_borrowings(), OTHER)
+
+    def test_tag_per_token(self):
+        self.assertEqual(self.prediction.tag_per_token(), TAG_PER_TOKEN)
+
+
+if __name__ == "__main__":
+    unittest.main()
