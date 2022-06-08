@@ -59,5 +59,5 @@ Who develops ``pylazaro``?
 
 How can I reach the maintainer?
 ---------------------------------
-If you have any questions, find any bugs or want to share anything with me, feel free to reach me at ealvarezmellado [@] gmail.com or ping me on Twitter `@lirondos <https://twitter.com/lirondos>`_.
+If you have any questions, find any bugs or want to share anything with me, feel free to reach me at ealvarezmellado [@] gmail.com, open `an issue on the GitHub repo <https://github.com/lirondos/pylazaro>`_ or ping me on Twitter `@lirondos <https://twitter.com/lirondos>`_.
 
