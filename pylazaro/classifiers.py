@@ -1,4 +1,5 @@
 import logging
+import os
 import pathlib
 import re
 from abc import ABC, abstractmethod
@@ -113,6 +114,10 @@ class CRFClassifier(LazaroClassifier):
     @model.default
     def load_model(self):
         path_to_model = Path(PATH_TO_MODELS_DIR, self.model_file)
+        if not os.path.exists(path_to_model):
+            raise Exception(
+                "CRF model file does not exist. Extended installation needed! (See https://pylazaro.readthedocs.io/en/latest/install.html)"
+            )
         logging.info("Loading model... (this may take a while)")
         window_size = 2
         features = [

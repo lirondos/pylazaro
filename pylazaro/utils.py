@@ -902,6 +902,10 @@ class WordVectorFeatureNerpy(FeatureExtractor):
         self.vectors_id = vectors
         self.scale = scaling
         path_to_vectors_db = PATH_TO_EMBEDDINGS_DB
+        if not os.path.exists(path_to_vectors_db):
+            raise Exception(
+                "Embeddings file does not exist. Extended installation needed! (See https://pylazaro.readthedocs.io/en/latest/install.html)"
+            )
         self.word_vectors = SqliteWordEmbedding.open(path_to_vectors_db)
 
     def extract(
