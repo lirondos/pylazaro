@@ -5,8 +5,6 @@ import re
 import string
 from abc import ABC, abstractmethod
 from collections import defaultdict
-
-# from quickvec import SqliteWordEmbedding
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
@@ -14,6 +12,7 @@ import numpy as np
 import pycrfsuite
 import regex
 import requests
+from quickvec import SqliteWordEmbedding
 from spacy.tokens import Doc, Span, Token
 from tqdm import tqdm
 

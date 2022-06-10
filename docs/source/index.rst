@@ -3,7 +3,7 @@ Welcome to ``pylazaro``'s documentation!
 
 What is ``pylazaro``
 ********************
-``pylazaro`` is a Python library that automatically detects lexical borrowings (or loanwords) in Spanish text, particularly  borrowings that come from English (a.k.a. anglicisms), words such as `app`, `lawfare`, `fake news` or `machine learning`. 
+``pylazaro`` is a Python library that automatically detects lexical borrowings (or loanwords) in Spanish text, particularly  borrowings that come from English (a.k.a. anglicisms), such as `app`, `lawfare`, `fake news` or `machine learning`. 
 
 Learn more about the motivation and the backstage of the project at :doc:`about`.
 

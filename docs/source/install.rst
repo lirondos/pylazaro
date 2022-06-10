@@ -19,7 +19,7 @@ To install ``pylazaro``, you simply need to run the following command:
 Extended installation
 ======================
 
-There is an extended installation option for ``pylazaro``. This extended installation is needed if you want to run the CRF model for Lazaro (see section 3.1 from `this paper  <https://aclanthology.org/2022.acl-long.268/>`_). However, it is unlikely that you will ever need to run that model, as the CRF model is the worst performing model of all models offered through the library. The extended installation is probably only useful for research or development uses, but not for final users.
+There is an extended installation option for ``pylazaro``. This extended installation is needed if you want to run the CRF model for Lazaro (see section 3.1 from `this paper  <https://aclanthology.org/2022.acl-long.268/>`_). However, it is unlikely that you will ever need to run that model, as the CRF model is the worst performing model of all models offered through the library. The extended installation is probably only useful for research or development purposes, but not for final users.
 
 If you still wish to install the extended version, see below the commands you need to run. 
 
@@ -30,9 +30,9 @@ If you still wish to install the extended version, see below the commands you ne
 
 .. code-block:: console
 
-   $ pip install git+https://github.com/ConstantineLignos/quickvec.git
    $ pip install pylazaro
    $ python -m pylazaro extended
+   $ python -m spacy download es_core_news_md
 
 How to uninstall
 ============================
@@ -44,7 +44,7 @@ To uninstall ``pylazaro``, simply run:
    $ pip uninstall pylazaro
    
 
-If you installed the extended version, running ``pip unistall pylazaro`` will not suffice. You will also need to navigate to ``pylazaro``'s package folder and in your ``site-package`` folder and remove all remaining files (model and embeddings).
+If you installed the extended version, running ``pip unistall pylazaro`` will not suffice. You will also need to navigate to ``pylazaro``'s package folder in your ``site-package`` folder and remove all remaining files (model and embeddings).
 
 .. code-block:: console
 
