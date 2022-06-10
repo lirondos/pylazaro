@@ -114,10 +114,6 @@ class CRFClassifier(LazaroClassifier):
     @model.default
     def load_model(self):
         path_to_model = Path(PATH_TO_MODELS_DIR, self.model_file)
-        if not os.path.exists(path_to_model):
-            raise Exception(
-                "CRF model file does not exist. Extended installation needed! (See https://pylazaro.readthedocs.io/en/latest/install.html)"
-            )
         logging.info("Loading model... (this may take a while)")
         window_size = 2
         features = [
@@ -142,12 +138,22 @@ class CRFClassifier(LazaroClassifier):
             )
         )
         crf.tagger = pycrfsuite.Tagger()
-        crf.tagger.open(path_to_model.as_posix())
+        try:
+            crf.tagger.open(path_to_model.as_posix())
+        except:
+            print(
+                "CRF model file does not exist. Extended installation needed! Please install the extended version of pylazaro (See https://pylazaro.readthedocs.io/en/latest/install.html)"
+            )
         return crf
 
     @spacy_model.default
     def load_spacy(self) -> Language:
-        spacy_model = spacy.load("es_core_news_md", exclude=["ner"])
+        try:
+            spacy_model = spacy.load("es_core_news_md", exclude=["ner"])
+        except:
+            print(
+                "Spacy model not installed. Extended installation needed! Please install the extended version of pylazaro (See https://pylazaro.readthedocs.io/en/latest/install.html)"
+            )
         spacy_model.tokenizer = CRFClassifier.custom_tokenizer(spacy_model)
         return spacy_model
 
