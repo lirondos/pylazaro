@@ -18,8 +18,9 @@ logging.getLogger("gensim").setLevel(logging.ERROR)
 logging.getLogger("filelock").setLevel(logging.ERROR)
 logging.basicConfig(level=logging.INFO)
 
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
+if os.name == "nt":
+    temp = pathlib.PosixPath
+    pathlib.PosixPath = pathlib.WindowsPath
 
 
 @attr.s
