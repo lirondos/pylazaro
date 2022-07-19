@@ -15,8 +15,11 @@ import requests
 from quickvec import SqliteWordEmbedding
 from spacy.tokens import Doc, Span, Token
 from tqdm import tqdm
+from collections import OrderedDict
 
 from .constants import *
+from .borrowing import Borrowing
+from .token import Token
 
 UPPERCASE_RE = regex.compile(r"[\p{Lu}\p{Lt}]")
 LOWERCASE_RE = regex.compile(r"\p{Ll}")
@@ -87,13 +90,13 @@ class CRFsuiteEntityRecognizer_CoNLL:
         # self._encoder = encoder
 
     """
-	@property
-	def encoder(self) -> EntityEncoder:
-		return self._encoder
+    @property
+    def encoder(self) -> EntityEncoder:
+        return self._encoder
 
-	def set_encoder(self, encoder):
-		self._encoder = encoder
-	"""
+    def set_encoder(self, encoder):
+        self._encoder = encoder
+    """
 
     def train(
         self, corpus, algorithm: str, params: dict, path: str, verbose=False
@@ -783,14 +786,14 @@ class PerplexityFeature(FeatureExtractor):
         self.perplexities = np.array(self.perplexities)
         self.threashold = np.percentile(self.perplexities, 80)
         """
-		standard = np.std(self.perplexities)
-		mean = np.average(self.perplexities)
-		floor = mean - standard
-		ceiling = mean + standard
-		for perplexity, words in self.perplexity_dict.items():
-			if perplexity >= floor and perplexity <= ceiling:
-				print(words)
-		"""
+        standard = np.std(self.perplexities)
+        mean = np.average(self.perplexities)
+        floor = mean - standard
+        ceiling = mean + standard
+        for perplexity, words in self.perplexity_dict.items():
+            if perplexity >= floor and perplexity <= ceiling:
+                print(words)
+        """
 
     def get_perplexity(self, lemma):
         l = self.word_probability_ES.get_word_probability(lemma) / len(lemma)
@@ -983,26 +986,35 @@ def set_embeddings_with_quickvec(path_to_embeddings, path_to_embeddings_db):
     )
 
 
-def fuse_spans(output_tokens):
+def fuse_spans(output_tokens: List[Token]) -> List[Borrowing]:
     new_output = []
     half_boiled_label = None
     half_boiled_token = []
+    start_pos = 0
 
-    for token, label in output_tokens:
-        if label == "O":
+    for i, token in enumerate(output_tokens):
+        if token.is_outside_label():
             if half_boiled_label:
-                new_output.append((" ".join(half_boiled_token), half_boiled_label))
+                bor = Borrowing.from_span(half_boiled_token, half_boiled_label, start_pos, i,
+                                   output_tokens)
+                new_output.append(bor)
                 half_boiled_label = None
                 half_boiled_token = []
-            new_output.append((token, label))
-        if label.startswith("B"):
+            start_pos = i
+            #new_output.append((token, label))
+        if token.is_begin_label():
             if half_boiled_label:
-                new_output.append((" ".join(half_boiled_token), half_boiled_label))
-            half_boiled_label = label.split("-")[1]
+                bor = Borrowing.from_span(half_boiled_token, half_boiled_label, start_pos, i, output_tokens)
+                new_output.append(bor)
+            half_boiled_label = token.lang_label
             half_boiled_token = [token]
-        if label.startswith("I"):
-            half_boiled_label = label.split("-")[1]
+            start_pos = i
+        if token.is_inside_label():
+            half_boiled_label = token.lang_label
+            if not half_boiled_token:
+                start_pos = i
             half_boiled_token.append(token)
     if half_boiled_label:
-        new_output.append((" ".join(half_boiled_token), half_boiled_label))
+        bor = Borrowing.from_span(half_boiled_token, half_boiled_label, start_pos, len(output_tokens), output_tokens)
+        new_output.append(bor)
     return new_output

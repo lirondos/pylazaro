@@ -17,11 +17,8 @@ from spacy.tokenizer import Tokenizer
 from spacy.training import biluo_tags_to_spans
 from transformers import AutoModelForTokenClassification, AutoTokenizer, pipeline
 
-from pylazaro.outputs import (
-    LazaroOutput,
-    LazaroOutputCRF,
-    LazaroOutputFlair,
-    LazaroOutputTransformers,
+from pylazaro.output import (
+    LazaroOutput
 )
 from pylazaro.utils import (
     BiasFeature,
@@ -68,10 +65,10 @@ class FlairClassifier(LazaroClassifier):
         tagger = SequenceTagger.load(self.model_name)
         return tagger
 
-    def predict(self, text: str) -> LazaroOutputFlair:
+    def predict(self, text: str) -> LazaroOutput:
         sentence = Sentence(text)
         self.model.predict(sentence, force_token_predictions=True)
-        sentence = LazaroOutputFlair(sentence)
+        sentence = LazaroOutput.from_Flair(sentence)
         return sentence
 
 
@@ -91,7 +88,7 @@ class TransformersClassifier(LazaroClassifier):
         tokenizer = AutoTokenizer.from_pretrained(self.model_name, do_lower_case=False)
         return tokenizer
 
-    def predict(self, text: str) -> LazaroOutputTransformers:
+    def predict(self, text: str) -> LazaroOutput:
         inputs = self.tokenizer(text, return_tensors="pt")
         tokens = inputs.tokens()
         outputs = self.model(**inputs).logits
@@ -100,7 +97,7 @@ class TransformersClassifier(LazaroClassifier):
             (token, self.model.config.id2label[prediction])
             for token, prediction in zip(tokens, predictions[0].numpy())
         ]
-        return LazaroOutputTransformers(output)
+        return LazaroOutput.from_Transformers(output)
 
 
 @attr.s
@@ -157,14 +154,14 @@ class CRFClassifier(LazaroClassifier):
         spacy_model.tokenizer = CRFClassifier.custom_tokenizer(spacy_model)
         return spacy_model
 
-    def predict(self, text: str) -> LazaroOutputCRF:
+    def predict(self, text: str) -> LazaroOutput:
         doc = self.spacy_model(text)
         predicted_tags = [tag for sent in doc.sents for tag in self.model(sent)]
         doc.user_data["tags"] = predicted_tags
         predicted_tags_biluo = CRFClassifier.to_biluo(predicted_tags)
         predicted_spans = biluo_tags_to_spans(doc, predicted_tags_biluo)
         doc.ents = predicted_spans
-        return LazaroOutputCRF(doc)
+        return LazaroOutput.from_CRF(doc)
 
     @staticmethod
     def to_biluo(tags: List[str]) -> List[str]:

@@ -10,7 +10,7 @@ from pylazaro.classifiers import (
     LazaroClassifier,
     TransformersClassifier,
 )
-from pylazaro.outputs import LazaroOutput
+from pylazaro.output import LazaroOutput
 
 logging.getLogger("transformers").setLevel(logging.ERROR)
 logging.getLogger("flair").setLevel(logging.ERROR)

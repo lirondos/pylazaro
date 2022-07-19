@@ -5,8 +5,9 @@ import sys
 from .constants import *
 from .utils import decompress_embeddings, download, set_embeddings_with_quickvec
 
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
+if os.name == "nt":
+    temp = pathlib.PosixPath
+    pathlib.PosixPath = pathlib.WindowsPath
 
 
 def main():

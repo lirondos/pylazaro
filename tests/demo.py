@@ -5,16 +5,18 @@ from pylazaro import Lazaro
 model = sys.argv[1]
 
 tagger = Lazaro(model_type=model)
-text = "Inteligencia artificial aplicada al sector del digital health, la e-mobility, las smarts grids y las apps entre otros; favoreciendo las interacciones colaborativas."
+text = "Inteligencia artificial aplicada al sector del digital health, la e-mobility, las smarts " \
+       "grids y las apps entre otros; favoreciendo las interacciones colaborativas. Un look " \
+       "atrevido."
 
 # We run our tagger on the text we want to analyze
 result = tagger.analyze(text)
-
+print(result)
 # We get results
-print(result.borrowings())
-print(result.anglicisms())
-print(result.other_borrowings())
-print(result.count())
+print(result.borrowings)
+print(result.borrowings_to_dict())
+print(result.anglicisms)
+print(result.other_borrowings)
 print(result.tag_per_token())
 
 """
