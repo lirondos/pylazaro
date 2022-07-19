@@ -22,7 +22,7 @@ class LazaroOutput():
 
     @property
     def text(self) -> str:
-        return " ".join([token.value for token in self.tokens])
+        return " ".join([token.text for token in self.tokens])
 
     @classmethod
     def from_CRF(cls, crf_output):
