@@ -30,10 +30,8 @@ class Borrowing(object):
     Attributes:
             tokens (List[`pylazaro.token.Token`]): list of Tokens that form the Borrowing
             language (str): language (the @property language follows iso codes)
-            start_pos (int): start position of the borrowing spans (int position refers to
-            tokenized sentence)
-            end_pos (int): end position of the borrowing spans (int position refers to
-            tokenized sentence)
+            start_pos (int): start position of the borrowing spans (refers to context_tokens)
+            end_pos (int): end position of the borrowing spans (refers context tokens)
             context_tokens (List[`pylazaro.token.Token`]): list of Tokens that form the sentence
     """
     tokens = attr.ib(type=List[Token])
