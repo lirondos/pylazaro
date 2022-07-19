@@ -29,7 +29,7 @@ A working example on how to detect borrowings in a text using `pylazaro`:
 >>> result = tagger.analyze(text)
 
 # We get results
->>> result.borrowings()
+>>> result.borrowings_to_tuple()
 [('blockchain', 'ENG'), ('e-mobility', 'ENG'), ('smarts grids', 'ENG')]
 
 >>> result.tag_per_token()
