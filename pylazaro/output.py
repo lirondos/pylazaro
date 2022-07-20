@@ -1,13 +1,13 @@
 import attr
 from typing import List, Tuple, Dict
-from attr import define
+
 
 
 from pylazaro.utils import fuse_spans
 from .borrowing import Borrowing
 from .token import Token
 
-@define
+@attr.s
 class LazaroOutput():
     """The object that stores the output produced by Lazaro tagger
 
