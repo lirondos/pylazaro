@@ -36,11 +36,18 @@ class LazaroOutput():
     def from_Flair(cls, flair_output):
         def align_labels() -> List[Token]:
             aligned_labels = []
-            for i, token in enumerate(flair_output.tokens):
+            i = 0
+            for token in flair_output.tokens:
                 if not token.labels:
                     aligned_labels.append(Token(token.text, "O", i, None))
+                    i = i + 1
+                elif token.text.endswith("’") or token.text.endswith("'") :
+                    aligned_labels.append(Token(token.text[:-1], token.labels[0].value, i, token.score))
+                    aligned_labels.append(Token(token.text[-1], "O", i + 1, None))
+                    i = i + 2
                 else:
                     aligned_labels.append(Token(token.text, token.labels[0].value, i, token.score))
+                    i = i + 1
             return aligned_labels
 
         tokens = align_labels()
