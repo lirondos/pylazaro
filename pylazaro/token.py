@@ -9,6 +9,16 @@ if os.name == "nt":
     temp = pathlib.PosixPath
     pathlib.PosixPath = pathlib.WindowsPath
 
+QUOTATIONS = ["’",
+              "‘",
+              "”",
+              "“",
+              "\"",
+              "\'",
+              "«",
+              "»",
+              ]
+
 @attr.s
 class Token(object):
     """
@@ -41,6 +51,9 @@ class Token(object):
 
     def is_inside_label(self) -> bool:
         return self.bio_label == "I"
+
+    def is_quotation(self) -> bool:
+        return self.text in QUOTATIONS
 
 
 

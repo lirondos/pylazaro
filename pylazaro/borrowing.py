@@ -14,13 +14,6 @@ if os.name == "nt":
     temp = pathlib.PosixPath
     pathlib.PosixPath = pathlib.WindowsPath
 
-def language_to_iso(lang) -> str:
-    """
-
-    Returns: language of the borrowing as 2 letter iso code (or other)
-
-    """
-    return LANGUAGE_CODES[lang.upper()]
 
 @attr.s
 class Borrowing(object):
@@ -91,6 +84,19 @@ class Borrowing(object):
         """
         return self.language == "other"
 
+    def has_quotation(self) -> bool:
+        """
+
+        Returns: Whether the given borrowing is surrounded by quotation marks in the context
+
+        """
+        if self.start_pos == 0 or self.end_pos == len(self.context_tokens):
+            # if borrowing is sentence initial or end of sentence, no quot marks possible
+            return False
+        prev_token = self.context_tokens[self.start_pos - 1]
+        following_token = self.context_tokens[self.end_pos]
+        return prev_token.is_quotation() and following_token.is_quotation()
+
 
 
 
@@ -115,3 +121,12 @@ class Borrowing(object):
 
         return {"borrowing": self.text, "language": self.language, "start_pos": self.start_pos,
                 "end_pos": self.end_pos}
+
+
+def language_to_iso(lang) -> str:
+    """
+
+    Returns: language of the borrowing as 2 letter iso code (or other)
+
+    """
+    return LANGUAGE_CODES[lang.upper()]
