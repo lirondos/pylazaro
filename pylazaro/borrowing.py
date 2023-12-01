@@ -7,8 +7,8 @@ from .token import Token
 
 import attr
 
-LANGUAGE_CODES = defaultdict(lambda: 'other')
-LANGUAGE_CODES["ENG"] = "en"
+#LANGUAGE_CODES = defaultdict(lambda: 'other')
+#LANGUAGE_CODES["ENG"] = "en"
 
 if os.name == "nt":
     temp = pathlib.PosixPath
@@ -65,7 +65,7 @@ class Borrowing(object):
     @classmethod
     def from_span(cls, tokens: List[Token], label: str, start_pos: int,
                   end_pos: int, output_tokens: List[Token]):
-        return cls(tokens, start_pos, end_pos, language_to_iso(label),
+        return cls(tokens, start_pos, end_pos, label,
                   output_tokens)
 
     def is_anglicism(self) -> bool:

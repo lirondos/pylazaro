@@ -9,15 +9,20 @@ What is ``pylazaro``?
 
 How does ``pylazaro`` work?
 ---------------------------------
-``pylazaro`` takes Spanish text as input an returns the borrowings found in the text. Borrowings from English will be labeled as ``ENG``, borrowings from other languages will be labeled as ``OTHER``. What lies at the core of ``pylazaro`` is a machine learning model that has been trained for the task of detecting unassimilated lexical borrowings from Spanish newspapers. 
+``pylazaro`` takes Spanish text as input an returns the borrowings found in the text. Borrowings
+from English will be labeled as ``en``, borrowings from other languages will be labeled as
+``other``. What lies at the core of ``pylazaro`` is a machine learning model that has been trained
+for the task of detecting unassimilated lexical borrowings from Spanish newspapers.
 
-``pylazaro`` can be run with three different types of models: 
+``pylazaro`` can be run with five different types of models:
 
 #. `A BiLSTM-CRF model fed with subword embeddings and lexical embeddings pretrained on codeswitching data <https://huggingface.co/lirondos/anglicisms-spanish-flair-cs>`_ (this is the best performing model, and the default model used by ``pylazaro``)
+#. `A BiLSTM-CRF model fed with subword embeddings and bilingual Transformer-based Spanish-English lexical embeddings <https://huggingface.co/lirondos/anglicisms-spanish-flair-bert-beto>`_ (this is the best performing model, and the default model used by ``pylazaro``)
 #. `A Transformer model based on multilingual BERT <https://huggingface.co/lirondos/anglicisms-spanish-mbert>`_
+#. `A Transformer model based on Spanish model BETO <https://huggingface.co/lirondos/anglicisms-spanish-beto>`_
 #. A Conditional Random Field model with handcrafted features
 
-By default, ``pylazaro`` uses the first model (BiLSTM-CRF), which is the best-performing model of all three, but this can be modified at will (see :doc:`howto`).  
+By default, ``pylazaro`` uses the first model (BiLSTM-CRF with codeswitch embeddings), which is the best-performing model of all, but this can be modified at will (see :doc:`howto`).
 
 For information about the creation of these models, training data and experimental results see the following paper: 
 
@@ -28,7 +33,10 @@ What is the point of ``pylazaro`` package?
 ---------------------------------------------
 The models behind ``pylazaro`` (the BiLSTM-CRF and the Transformer-based model) have been publicly released and can already be accessed `through HuggingFace modelhub <https://huggingface.co/models?other=arxiv:2203.16169>`_. So one could ask what the point of ``pylazaro`` is. The purpose of ``pylazaro`` is to offer a single interface for all available models for borrowing detection. 
 
-Let's say that we are using the `Transformer-based model <https://huggingface.co/lirondos/anglicisms-spanish-mbert>`_ using the `Transformers library <https://github.com/huggingface/transformers/>`_, but we want to try the `BiLSTM-CRF model <https://huggingface.co/lirondos/anglicisms-spanish-flair-cs>`_ , which produces better results. This would require changing all of our Python code and adapt it to `Flair library <https://github.com/flairNLP/flair/>`_, which is the library used by the BiLSTM-CRF model. This is a pain if we want to keep switching between models. And it will only get worse if new models based on different third-party packages are released. This scenario was precisely what I encountered doing my own PhD research. The purpose of ``pylazaro`` is therefore to offer a single interface for all borrowing detection models for Spanish that allows for switching between models smoothly.
+Let's say that we are using the `Transformer-based model <https://huggingface
+.co/lirondos/anglicisms-spanish-mbert>`_ using the `Transformers library <https://github
+.com/huggingface/transformers/>`_, but we want to try the `BiLSTM-CRF model <https://huggingface
+.co/lirondos/anglicisms-spanish-flair-cs>`_ , which produces better results. This would require changing all of our Python code and adapting it to `Flair library <https://github.com/flairNLP/flair/>`_, which is the library used by the BiLSTM-CRF model. This is a pain if we want to keep switching between models. And it will only get worse if new models based on different third-party packages are released. This scenario was precisely what I encountered doing my own PhD research. The purpose of ``pylazaro`` is therefore to offer a single interface for all borrowing detection models for Spanish that allows for switching between models smoothly.
 
 In addition, using the Transformers library or Flair may be trivial for experienced programers, but it may not be that simple for novice Python users. ``pylazaro`` also seeks to offer an easy way to use these borrowing detection models for people who work on Linguistics and that may not be expert Python users.
 

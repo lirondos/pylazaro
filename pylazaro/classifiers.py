@@ -57,12 +57,12 @@ class LazaroClassifier(ABC):
 
 @attr.s
 class FlairClassifier(LazaroClassifier):
-    model_name = attr.ib(type=str, default=FLAIR_DEFAULT_MODEL)
+    model_file = attr.ib(type=str, default=FLAIR_DEFAULT_MODEL, validator=attr.validators.in_(BILSTM_MODELS))
     model = attr.ib()
 
     @model.default
     def load_model(self):
-        tagger = SequenceTagger.load(self.model_name)
+        tagger = SequenceTagger.load(self.model_file)
         return tagger
 
     def predict(self, text: str) -> LazaroOutput:
@@ -74,18 +74,18 @@ class FlairClassifier(LazaroClassifier):
 
 @attr.s
 class TransformersClassifier(LazaroClassifier):
-    model_name = attr.ib(type=str, default=TRANSFORMERS_DEFAULT_MODEL)
+    model_file = attr.ib(type=str, default=TRANSFORMERS_DEFAULT_MODEL, validator=attr.validators.in_(TRANSFORMERS_MODELS))
     model = attr.ib()
     tokenizer = attr.ib()
 
     @model.default
     def load_model(self) -> AutoModelForTokenClassification:
-        model = AutoModelForTokenClassification.from_pretrained(self.model_name)
+        model = AutoModelForTokenClassification.from_pretrained(self.model_file)
         return model
 
     @tokenizer.default
     def load_tokenizer(self) -> AutoTokenizer:
-        tokenizer = AutoTokenizer.from_pretrained(self.model_name, do_lower_case=False)
+        tokenizer = AutoTokenizer.from_pretrained(self.model_file, do_lower_case=False)
         return tokenizer
 
     def predict(self, text: str) -> LazaroOutput:

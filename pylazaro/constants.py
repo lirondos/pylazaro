@@ -13,10 +13,16 @@ PATH_TO_EMBEDDINGS_DECOMPRESS = Path(PATH_TO_EMBEDDINGS_DIR, EMBEDDINGS_DECOMPRE
 PATH_TO_MODELS_DIR = Path(os.path.dirname(os.path.realpath(__file__)), "models")
 
 CS_MODEL = "lirondos/anglicisms-spanish-flair-cs"
+BETO_BERT_MODEL = "lirondos/anglicisms-spanish-flair-bert-beto"
 FLAIR_DEFAULT_MODEL = CS_MODEL
+BILSTM_MODELS = [BETO_BERT_MODEL, CS_MODEL]
 
-MBERT_MODEL = "lirondos/anglicisms-spanish-mbert"
+MBERT_MODEL = "lirondos/anglicisms-spanish-beto"
+BETO_MODEL = "lirondos/anglicisms-spanish-mbert"
 TRANSFORMERS_DEFAULT_MODEL = MBERT_MODEL
+TRANSFORMERS_MODELS = [MBERT_MODEL, BETO_MODEL]
+
+MODELS_FILES = TRANSFORMERS_MODELS + BILSTM_MODELS
 
 URL_TO_CRF_MODEL = (
     "https://github.com/lirondos/pylazaro/releases/download/v0.1/crf.model"

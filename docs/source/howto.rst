@@ -28,16 +28,20 @@ Here is a minimal example of how to use  ``pylazaro``:
 
 Running ``pylazaro`` with other models 
 *********************************************
-``pylazaro`` can be run with three different types of models (see `How does pylazaro work?` in :doc:`about`): 
+``pylazaro`` can be run with five different types of models (see `How does pylazaro work?` in :doc:`about`):
 
 #. `A BiLSTM-CRF model fed with subword embeddings and lexical embeddings pretrained on codeswitching data <https://huggingface.co/lirondos/anglicisms-spanish-flair-cs>`_ (this is the best performing model, and the default model used by ``pylazaro``)
+#. `A BiLSTM-CRF model fed with subword embeddings and bilingual Transformer-based Spanish-English lexical embeddings <https://huggingface.co/lirondos/anglicisms-spanish-flair-bert-beto>`_ (this is the best performing model, and the default model used by ``pylazaro``)
 #. `A Transformer model based on multilingual BERT <https://huggingface.co/lirondos/anglicisms-spanish-mbert>`_
+#. `A Transformer model based on Spanish model BETO <https://huggingface.co/lirondos/anglicisms-spanish-beto>`_
 #. A Conditional Random Field model with handcrafted features
 
-By default, ``pylazaro`` will use the first model (BiLSTM-CRF), which is the best-performing model of all three, but this can be modified when instantiating :class:`pylazaro.lazaro.Lazaro`:
+By default, ``pylazaro`` will use the first model (BiLSTM-CRF with codeswitched embeddings), which is the best-performing model of all, but this can be modified when instantiating :class:`pylazaro.lazaro.Lazaro`:
 
->>> tagger_bilstm = Lazaro(model_type = 'bilstm') # Equivalent to tagger_bilstm = Lazaro()
->>> tagger_transformers = Lazaro(model_type = 'transformers') 
+>>> tagger_bilstm = Lazaro(model_type = 'bilstm', model_file="lirondos/anglicisms-spanish-flair-cs") # Equivalent to tagger_bilstm = Lazaro() and to tagger_bilstm = Lazaro(model_type = 'bilstm')
+>>> tagger_bilstm = Lazaro(model_type = 'bilstm', model_file="lirondos/anglicisms-spanish-flair-bert-beto")
+>>> tagger_bilstm = Lazaro(model_type = 'transformers', model_file="lirondos/anglicisms-spanish-mbert") # Equivalent to tagger_transformers = Lazaro(model_type = 'transformers')
+>>> tagger_bilstm = Lazaro(model_type = 'transformers', model_file="lirondos/anglicisms-spanish-beto")
 >>> tagger_crf = Lazaro(model_type = 'crf') # Requires extended installation
 
 .. warning::
