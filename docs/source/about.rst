@@ -17,7 +17,7 @@ for the task of detecting unassimilated lexical borrowings from Spanish newspape
 ``pylazaro`` can be run with five different types of models:
 
 #. `A BiLSTM-CRF model fed with subword embeddings and lexical embeddings pretrained on codeswitching data <https://huggingface.co/lirondos/anglicisms-spanish-flair-cs>`_ (this is the best performing model, and the default model used by ``pylazaro``)
-#. `A BiLSTM-CRF model fed with subword embeddings and bilingual Transformer-based Spanish-English lexical embeddings <https://huggingface.co/lirondos/anglicisms-spanish-flair-bert-beto>`_ (this is the best performing model, and the default model used by ``pylazaro``)
+#. `A BiLSTM-CRF model fed with subword embeddings and bilingual Transformer-based Spanish-English lexical embeddings <https://huggingface.co/lirondos/anglicisms-spanish-flair-bert-beto>`_
 #. `A Transformer model based on multilingual BERT <https://huggingface.co/lirondos/anglicisms-spanish-mbert>`_
 #. `A Transformer model based on Spanish model BETO <https://huggingface.co/lirondos/anglicisms-spanish-beto>`_
 #. A Conditional Random Field model with handcrafted features
