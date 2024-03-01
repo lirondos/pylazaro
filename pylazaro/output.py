@@ -77,6 +77,9 @@ class LazaroOutput():
                         i = i + 1
                     half_boiled_token = tok
                     half_boiled_label = label
+                        # Append the last token or tokens if any
+            if half_boiled_token.strip():
+                new_output.append(Token(half_boiled_token, half_boiled_label, i))
             return new_output
 
         tokens = align_labels()

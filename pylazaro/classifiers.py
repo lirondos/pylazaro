@@ -88,15 +88,23 @@ class TransformersClassifier(LazaroClassifier):
         tokenizer = AutoTokenizer.from_pretrained(self.model_file, do_lower_case=False)
         return tokenizer
 
-    def predict(self, text: str) -> LazaroOutput:
-        inputs = self.tokenizer(text, return_tensors="pt")
-        tokens = inputs.tokens()
-        outputs = self.model(**inputs).logits
-        predictions = torch.argmax(outputs, dim=2)
-        output = [
-            (token, self.model.config.id2label[prediction])
-            for token, prediction in zip(tokens, predictions[0].numpy())
-        ]
+    def predict(self, text) -> LazaroOutput:
+        if isinstance(text, list)):
+            inputs = self.tokenizer.convert_tokens_to_ids(tokens)
+            inputs = torch.tensor([inputs])
+            outputs = self.model(inputs).logits
+            predictions = torch.argmax(outputs, dim=2)
+            labels = [self.model.config.id2label[prediction] for prediction in predictions[0].numpy()]
+            output = list(zip(tokens, labels))
+        else:
+            inputs = self.tokenizer(text, return_tensors="pt")
+            tokens = inputs.tokens()
+            outputs = self.model(**inputs).logits
+            predictions = torch.argmax(outputs, dim=2)
+            output = [
+                (token, self.model.config.id2label[prediction])
+                for token, prediction in zip(tokens, predictions[0].numpy())
+            ]
         return LazaroOutput.from_Transformers(output)
 
 
@@ -149,7 +157,7 @@ class CRFClassifier(LazaroClassifier):
             spacy_model = spacy.load("es_core_news_md", exclude=["ner"])
         except:
             print(
-                "Spacy model not installed. Extended installation needed! Please install the extended version of pylazaro (See https://pylazaro.readthedocs.io/en/latest/install.html)"
+                "Spacy model not installed. Did you forget to run the \"python -m spacy download es_core_news_md\" command from the extended installation? Please see the extended version of pylazaro (See https://pylazaro.readthedocs.io/en/latest/install.html)"
             )
         spacy_model.tokenizer = CRFClassifier.custom_tokenizer(spacy_model)
         return spacy_model

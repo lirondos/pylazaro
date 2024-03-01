@@ -66,11 +66,12 @@ class Lazaro(object):
                 return TransformersClassifier(model_file=self.model_file)
             return TransformersClassifier()
 
-    def analyze(self, text: str) -> LazaroOutput:
+    def analyze(self, text) -> LazaroOutput:
         """The method that calls the tagger on a given text to detect borrowings.
 
         Args:
-                text (str): The text that we want to analyze for borrowings
+                text: The text that we want to analyze for borrowings. 
+                This can be a string or a list of words (if the text is already tokenized)
 
         Returns:
                 `pylazaro.classifiers.LazaroOutput`: The LazaroOutput object that contains the output produced by Lazaro tagger (the output where the automatic detection of borrowings is stored)
