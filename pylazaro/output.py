@@ -31,7 +31,6 @@ class LazaroOutput():
         spans = fuse_spans(tokens)
         return cls(tokens, spans)
 
-
     @classmethod
     def from_Flair(cls, flair_output):
         def align_labels() -> List[Token]:
@@ -50,7 +49,7 @@ class LazaroOutput():
                     i = i + 1
             return aligned_labels
 
-        tokens = align_labels()
+        tokens = [tok for tok in align_labels() if tok.text]
         spans = fuse_spans(tokens)
         return cls(tokens, spans)
 

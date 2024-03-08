@@ -4,6 +4,7 @@ import pathlib
 import re
 from abc import ABC, abstractmethod
 from typing import List
+from collections import Counter
 
 import attr
 import pycrfsuite
@@ -89,13 +90,9 @@ class TransformersClassifier(LazaroClassifier):
         return tokenizer
 
     def predict(self, text) -> LazaroOutput:
-        if isinstance(text, list)):
-            inputs = self.tokenizer.convert_tokens_to_ids(tokens)
-            inputs = torch.tensor([inputs])
-            outputs = self.model(inputs).logits
-            predictions = torch.argmax(outputs, dim=2)
-            labels = [self.model.config.id2label[prediction] for prediction in predictions[0].numpy()]
-            output = list(zip(tokens, labels))
+        if isinstance(text, list): # text is already tokenized
+            output = self.predict_on_tokenized(text)
+            return LazaroOutput.from_Transformers(output)
         else:
             inputs = self.tokenizer(text, return_tensors="pt")
             tokens = inputs.tokens()
@@ -106,6 +103,54 @@ class TransformersClassifier(LazaroClassifier):
                 for token, prediction in zip(tokens, predictions[0].numpy())
             ]
         return LazaroOutput.from_Transformers(output)
+        
+    def predict_on_tokenized(self, tokenized_text: list) -> list:
+        grouped_inputs = [torch.LongTensor([self.tokenizer.cls_token_id])]
+        subtokens_per_token = []
+
+        for token in tokenized_text:
+            tokens = self.tokenizer.encode(
+                token,
+                return_tensors="pt",
+                add_special_tokens=False,
+            ).squeeze(axis=0)
+            grouped_inputs.append(tokens)
+            subtokens_per_token.append(len(tokens))
+
+        grouped_inputs.append(torch.LongTensor([self.tokenizer.sep_token_id]))
+
+        flattened_inputs = torch.cat(grouped_inputs)
+        flattened_inputs = torch.unsqueeze(flattened_inputs, 0)
+
+        # Predict
+        predictions_tensor = self.model(flattened_inputs)[0]
+        predictions_tensor = torch.argmax(predictions_tensor, dim=2)
+
+
+        predictions = [self.model.config.id2label[prediction] for prediction in predictions_tensor[0].numpy()]
+
+        # Align tokens
+
+        # Remove special tokens [CLS] and [SEP]
+        predictions = predictions[1:-1]
+
+        aligned_predictions = []
+
+        # assert len(predictions) == sum(subtokens_per_token)
+
+        ptr = 0
+        for size in subtokens_per_token:
+            group = predictions[ptr:ptr + size]
+            #assert len(group) == size
+
+            aligned_predictions.append(group)
+            ptr += size
+
+        #assert len(tokenized_text) == len(aligned_predictions)
+
+        output = [(token, Counter(prediction_group).most_common(1)[0][0]) for token, prediction_group in zip(tokenized_text, aligned_predictions)]
+        return output
+
 
 
 @attr.s
@@ -159,10 +204,14 @@ class CRFClassifier(LazaroClassifier):
             print(
                 "Spacy model not installed. Did you forget to run the \"python -m spacy download es_core_news_md\" command from the extended installation? Please see the extended version of pylazaro (See https://pylazaro.readthedocs.io/en/latest/install.html)"
             )
-        spacy_model.tokenizer = CRFClassifier.custom_tokenizer(spacy_model)
+        #spacy_model.tokenizer = CRFClassifier.custom_tokenizer(spacy_model)
         return spacy_model
 
     def predict(self, text: str) -> LazaroOutput:
+        if isinstance(text, list): # text is already tokenized
+            text = Doc(self.spacy_model.vocab, words=text)
+        else:
+            self.spacy_model.tokenizer = CRFClassifier.custom_tokenizer(self.spacy_model)
         doc = self.spacy_model(text)
         predicted_tags = [tag for sent in doc.sents for tag in self.model(sent)]
         doc.user_data["tags"] = predicted_tags
@@ -182,7 +231,10 @@ class CRFClassifier(LazaroClassifier):
                     new_tag = "U" + tag[1:]
                     new_tags.append(new_tag)
             elif tag.startswith("I"):
-                if i < len(tags) - 1 and tags[i + 1].startswith("I"):
+                if i==0 or tags[i - 1].startswith("O") or tags[i - 1].startswith("L"): # invalid sequence
+                    new_tag = "B" + tag[1:]
+                    new_tags.append(new_tag)
+                elif i < len(tags) - 1 and tags[i + 1].startswith("I"):
                     new_tags.append(tag)
                 else:
                     new_tag = "L" + tag[1:]

@@ -25,7 +25,7 @@ TRANSFORMERS_MODELS = [MBERT_MODEL, BETO_MODEL]
 MODELS_FILES = TRANSFORMERS_MODELS + BILSTM_MODELS
 
 URL_TO_CRF_MODEL = (
-    "https://github.com/lirondos/pylazaro/releases/download/v0.1/crf.model"
+    "https://github.com/lirondos/pylazaro/releases/download/v0.2/crf.model"
 )
 CRF_FILENAME = "crf.model"
 PATH_TO_CRF_MODEL = Path(PATH_TO_MODELS_DIR, CRF_FILENAME)
