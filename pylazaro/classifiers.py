@@ -16,6 +16,7 @@ from spacy.lang.tokenizer_exceptions import URL_PATTERN
 from spacy.language import Language
 from spacy.tokenizer import Tokenizer
 from spacy.training import biluo_tags_to_spans
+from spacy.tokens import Doc
 from transformers import AutoModelForTokenClassification, AutoTokenizer, pipeline
 
 from pylazaro.output import (
