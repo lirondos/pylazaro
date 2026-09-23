@@ -26,7 +26,7 @@ year = datetime.now().year
 copyright = u"%d Elena Álvarez-Mellado" % year
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.0'
+release = '1.2.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -46,6 +46,22 @@ html_theme_options = {
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.coverage', 'sphinx.ext.autosummary']
+
+# autodoc has to import pylazaro to read its docstrings. Mocking the heavy runtime
+# dependencies keeps the docs build from having to install torch, flair and spacy.
+autodoc_mock_imports = [
+    'flair',
+    'numpy',
+    'pycrfsuite',
+    'quickvec',
+    'regex',
+    'requests',
+    'spacy',
+    'thinc',
+    'torch',
+    'tqdm',
+    'transformers',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

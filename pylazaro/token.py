@@ -1,13 +1,8 @@
 import os
-import pathlib
 from typing import List, Tuple, Dict
 from collections import defaultdict
 
 import attr
-
-if os.name == "nt":
-    temp = pathlib.PosixPath
-    pathlib.PosixPath = pathlib.WindowsPath
 
 QUOTATIONS = ["’",
               "‘",

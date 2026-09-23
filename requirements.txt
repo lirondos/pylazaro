@@ -1,5 +1,11 @@
-flair>=0.1.0
+transformers>=4.30,<4.46
+flair>=0.12,<0.14
 attrs
-git+https://github.com/ConstantineLignos/quickvec.git
-transformers
-spacy
+torch>=1.13,<2.6
+spacy>=3.2,<4
+python-crfsuite
+quickvec>=0.2
+numpy
+regex
+requests
+tqdm

@@ -10,8 +10,8 @@ What is ``pylazaro``?
 How does ``pylazaro`` work?
 ---------------------------------
 ``pylazaro`` takes Spanish text as input an returns the borrowings found in the text. Borrowings
-from English will be labeled as ``en``, borrowings from other languages will be labeled as
-``other``. What lies at the core of ``pylazaro`` is a machine learning model that has been trained
+from English will be labeled as ``ENG``, borrowings from other languages will be labeled as
+``OTHER``. What lies at the core of ``pylazaro`` is a machine learning model that has been trained
 for the task of detecting unassimilated lexical borrowings from Spanish newspapers.
 
 ``pylazaro`` can be run with five different types of models:

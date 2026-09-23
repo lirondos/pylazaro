@@ -14,7 +14,12 @@ To install ``pylazaro``, you simply need to run the following command:
    $ pip install pylazaro
 
 .. note::
-    ``pylazaro`` works best on Python 3.8. We don't recommend installing ``pylazaro`` on Python 3.10, as it may result in some incompatibilities (related to the ``sentencepiece`` package).
+    ``pylazaro`` requires Python 3.8 or newer and has been tested up to Python 3.12.
+
+.. note::
+    ``pylazaro`` pins upper bounds on ``flair``, ``torch`` and ``transformers``. The
+    released BiLSTM checkpoints cannot be unpickled by ``flair`` 0.14 or newer, so
+    installing a newer ``flair`` alongside ``pylazaro`` will break the default model.
 
 Extended installation
 ======================
@@ -34,6 +39,16 @@ If you still wish to install the extended version, see below the commands you ne
    $ python -m pylazaro extended
    $ python -m spacy download es_core_news_md
 
+The model and the embeddings are downloaded to a per-user data directory
+(``%LOCALAPPDATA%\pylazaro`` on Windows, ``~/.cache/pylazaro`` elsewhere), so they
+survive reinstalls and upgrades of ``pylazaro``. Set the ``PYLAZARO_HOME`` environment
+variable to download them somewhere else.
+
+.. note::
+    If you ran the extended installation with ``pylazaro`` 1.1.21 or earlier, the files
+    live inside the package folder in ``site-packages``. That location is still used
+    when it already contains the files, so you do not need to download them again.
+
 How to uninstall
 ============================
 
@@ -44,11 +59,14 @@ To uninstall ``pylazaro``, simply run:
    $ pip uninstall pylazaro
    
 
-If you installed the extended version, running ``pip unistall pylazaro`` will not suffice. You will also need to navigate to ``pylazaro``'s package folder in your ``site-package`` folder and remove all remaining files (model and embeddings).
+If you installed the extended version, running ``pip uninstall pylazaro`` will not suffice: the model and the embeddings are downloaded after installation and ``pip`` does not know about them. You will also need to remove the data directory.
 
 .. code-block:: console
 
-   $ rm -r site-package/pylazaro
+   $ rm -r ~/.cache/pylazaro          # Linux and macOS
+   > rmdir /s %LOCALAPPDATA%\pylazaro  # Windows
+
+If you performed the extended installation with ``pylazaro`` 1.1.21 or earlier, the files are in ``pylazaro``'s package folder inside ``site-packages`` instead.
 
 
 

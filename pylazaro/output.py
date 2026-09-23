@@ -100,7 +100,7 @@ class LazaroOutput():
                                 >>> text = "Fue un look sencillo. Se celebra un festival de 'anime'."
                                 >>> output = tagger.analyze(text)
                                 >>> output.borrowings
-                                [Borrowing(tokens=[Token(text='look', label='B-ENG', position=2)], start_pos=2, end_pos=3, language='en'), Borrowing(tokens=[Token(text='anime', label='B-OTHER', position=11)], start_pos=11, end_pos=12, language='other')]
+                                [Borrowing(tokens=[Token(text='look', label='B-ENG', position=2)], start_pos=2, end_pos=3, language='ENG'), Borrowing(tokens=[Token(text='anime', label='B-OTHER', position=11)], start_pos=11, end_pos=12, language='OTHER')]
 
                 """
         return self.spans
@@ -120,7 +120,7 @@ class LazaroOutput():
                         >>> text = "Fue un look sencillo. Se celebra un festival de 'anime'."
                         >>> output = tagger.analyze(text)
                         >>> output.anglicisms
-                        [Borrowing(tokens=[Token(text='look', label='B-ENG', position=2)], start_pos=2, end_pos=3, language='en')]
+                        [Borrowing(tokens=[Token(text='look', label='B-ENG', position=2)], start_pos=2, end_pos=3, language='ENG')]
         """
         return [
             bor for bor in self.spans if bor.is_anglicism()
@@ -141,7 +141,7 @@ class LazaroOutput():
                         >>> text = "Fue un look sencillo. Se celebra un festival de 'anime'."
                         >>> output = tagger.analyze(text)
                         >>> output.other_borrowings
-                        [Borrowing(tokens=[Token(text='anime', label='B-OTHER', position=11)], start_pos=11, end_pos=12, language='other')]
+                        [Borrowing(tokens=[Token(text='anime', label='B-OTHER', position=11)], start_pos=11, end_pos=12, language='OTHER')]
         """
         return [
             bor for bor in self.spans if bor.is_other()
@@ -161,7 +161,7 @@ class LazaroOutput():
                                 >>> text = "Fue un look sencillo. Se celebra un festival de 'anime'."
                                 >>> output = tagger.analyze(text)
                                 >>> output.borrowings_to_tuple()
-                                [('look', 'en'), ('anime', 'other')]
+                                [('look', 'ENG'), ('anime', 'OTHER')]
 
                 """
         return [bor.to_tuple() for bor in self.borrowings]
@@ -180,7 +180,7 @@ class LazaroOutput():
                         >>> text = "Fue un look sencillo. Se celebra un festival de 'anime'."
                         >>> output = tagger.analyze(text)
                         >>> output.anglicisms_to_tuple()
-                        [('look', 'en')]
+                        [('look', 'ENG')]
         """
         return [bor.to_tuple() for bor in self.anglicisms]
 
@@ -199,7 +199,7 @@ class LazaroOutput():
                         >>> text = "Fue un look sencillo. Se celebra un festival de 'anime'."
                         >>> output = tagger.analyze(text)
                         >>> output.other_to_tuple()
-                        [('anime', 'other')]
+                        [('anime', 'OTHER')]
         """
         return [bor.to_tuple() for bor in self.other_borrowings]
 
@@ -217,7 +217,7 @@ class LazaroOutput():
                                 >>> text = "Fue un look sencillo. Se celebra un festival de 'anime'."
                                 >>> output = tagger.analyze(text)
                                 >>> output.borrowings_to_dict()
-                                [{'borrowing': 'look', 'language': 'en', 'start_pos': 2, 'end_pos': 3}, {'borrowing': 'anime', 'language': 'other', 'start_pos': 11, 'end_pos': 12}]`
+                                [{'borrowing': 'look', 'language': 'ENG', 'start_pos': 2, 'end_pos': 3}, {'borrowing': 'anime', 'language': 'OTHER', 'start_pos': 11, 'end_pos': 12}]`
 
                 """
         return [bor.to_dict() for bor in self.borrowings]
@@ -236,7 +236,7 @@ class LazaroOutput():
                         >>> text = "Fue un look sencillo. Se celebra un festival de 'anime'."
                         >>> output = tagger.analyze(text)
                         >>> output.anglicisms_to_dict()
-                        [{'borrowing': 'look', 'language': 'en', 'start_pos': 2, 'end_pos': 3}]
+                        [{'borrowing': 'look', 'language': 'ENG', 'start_pos': 2, 'end_pos': 3}]
         """
         return [bor.to_dict() for bor in self.anglicisms]
 
@@ -255,7 +255,7 @@ class LazaroOutput():
                         >>> text = "Fue un look sencillo. Se celebra un festival de 'anime'."
                         >>> output = tagger.analyze(text)
                         >>> output.other_to_dict()
-                        [{'borrowing': 'anime', 'language': 'other', 'start_pos': 11, 'end_pos': 12}]
+                        [{'borrowing': 'anime', 'language': 'OTHER', 'start_pos': 11, 'end_pos': 12}]
         """
         return [bor.to_dict() for bor in self.other_borrowings]
 

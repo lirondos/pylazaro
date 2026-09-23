@@ -251,3 +251,9 @@ dmypy.json
 cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm
+
+### pylazaro ###
+# Files downloaded by the extended installation. Recent versions download these to a
+# per-user data directory, but older installs put them inside the package folder.
+pylazaro/models/
+pylazaro/embeddings/

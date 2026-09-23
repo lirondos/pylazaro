@@ -1,10 +1,12 @@
 import bz2
 import logging
 import os
+import pathlib
 import re
 import string
 from abc import ABC, abstractmethod
 from collections import defaultdict
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
@@ -20,6 +22,35 @@ from collections import OrderedDict
 from .constants import *
 from .borrowing import Borrowing
 from .token import Token
+
+logger = logging.getLogger(__name__)
+
+
+class ExtendedInstallationRequired(Exception):
+    """Raised when a model requires files that the extended installation provides.
+
+    See https://pylazaro.readthedocs.io/en/latest/install.html
+    """
+
+
+@contextmanager
+def posix_paths_on_windows():
+    """Make ``pathlib.PosixPath`` usable on Windows for the duration of the block.
+
+    Some of the model checkpoints were pickled on POSIX systems and embed
+    ``PosixPath`` objects, which cannot be instantiated on Windows. Previous versions of
+    ``pylazaro`` patched ``pathlib`` globally on import; the patch is now limited to the
+    calls that actually unpickle a checkpoint, and is always undone afterwards.
+    """
+    if os.name != "nt":
+        yield
+        return
+    original_posix_path = pathlib.PosixPath
+    pathlib.PosixPath = pathlib.WindowsPath
+    try:
+        yield
+    finally:
+        pathlib.PosixPath = original_posix_path
 
 UPPERCASE_RE = regex.compile(r"[\p{Lu}\p{Lt}]")
 LOWERCASE_RE = regex.compile(r"\p{Ll}")
@@ -905,12 +936,9 @@ class WordVectorFeatureNerpy(FeatureExtractor):
         self.vectors_id = vectors
         self.scale = scaling
         path_to_vectors_db = PATH_TO_EMBEDDINGS_DB
-        try:
-            self.word_vectors = SqliteWordEmbedding.open(path_to_vectors_db)
-        except:
-            print(
-                "Embeddings file does not exist. Extended installation needed! Please install the extended version of pylazaro (See https://pylazaro.readthedocs.io/en/latest/install.html)"
-            )
+        if not Path(path_to_vectors_db).exists():
+            raise ExtendedInstallationRequired(EMBEDDINGS_MISSING_MESSAGE)
+        self.word_vectors = SqliteWordEmbedding.open(path_to_vectors_db)
 
     def extract(
         self,
@@ -944,10 +972,10 @@ class WordVectorFeatureNerpy(FeatureExtractor):
 
 
 def download(model_url, dir_name, filename):
-    dir_to_save = Path(os.path.dirname(os.path.realpath(__file__)), dir_name)
+    dir_to_save = DATA_DIRS.get(dir_name, Path(PACKAGE_DIR, dir_name))
     if not os.path.exists(dir_to_save):
         os.makedirs(dir_to_save)
-    logging.info(
+    logger.info(
         "Preparing to download "
         + filename
         + "... (this only needs to happen the first time you import the model)"

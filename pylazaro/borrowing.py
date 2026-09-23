@@ -1,5 +1,4 @@
 import os
-import pathlib
 from typing import List, Tuple, Dict
 from collections import defaultdict
 from .token import Token
@@ -7,12 +6,13 @@ from .token import Token
 
 import attr
 
-#LANGUAGE_CODES = defaultdict(lambda: 'other')
-#LANGUAGE_CODES["ENG"] = "en"
+LANGUAGE_CODES = defaultdict(lambda: 'other')
+LANGUAGE_CODES["ENG"] = "en"
+LANGUAGE_CODES["EN"] = "en"
 
-if os.name == "nt":
-    temp = pathlib.PosixPath
-    pathlib.PosixPath = pathlib.WindowsPath
+# Labels the taggers use for borrowings that come from English. The models emit the
+# uppercase tags (``ENG``), which is what the ``language`` attribute holds.
+ANGLICISM_LABELS = frozenset({"ENG", "EN"})
 
 
 @attr.s
@@ -74,7 +74,7 @@ class Borrowing(object):
         Returns: Whether the borrowing is an anglicism
 
         """
-        return self.language == "en"
+        return self.language is not None and self.language.upper() in ANGLICISM_LABELS
 
     def is_other(self) -> bool:
         """
@@ -82,7 +82,7 @@ class Borrowing(object):
         Returns: Whether the borrowing is of type other (not an anglicism)
 
         """
-        return self.language == "other"
+        return self.language is not None and not self.is_anglicism()
 
     def has_quotation(self) -> bool:
         """

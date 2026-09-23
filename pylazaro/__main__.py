@@ -1,21 +1,21 @@
 import logging
-import pathlib
 import sys
 
 from .constants import *
 from .utils import decompress_embeddings, download, set_embeddings_with_quickvec
 
-if os.name == "nt":
-    temp = pathlib.PosixPath
-    pathlib.PosixPath = pathlib.WindowsPath
-
 
 def main():
+    # This is an application entry point, so configuring logging here is safe.
+    # Importing pylazaro as a library no longer touches the root logger.
+    logging.basicConfig(level=logging.INFO)
     if len(sys.argv) > 1 and sys.argv[1] == "extended":
         download_crf()
         download_embeddings()
         logging.info("Done downloading!")
         # download_flair()
+    else:
+        print("Usage: python -m pylazaro extended")
 
 
 def download_crf():

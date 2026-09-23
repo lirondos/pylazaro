@@ -15,7 +15,7 @@ with open(path.join(HERE, "README.md"), encoding="utf-8") as f:
 # This call to setup() does all the work
 setup(
     name="pylazaro",
-    version="1.1.20",
+    version="1.2.0",
     description="A Python library for detecting lexical borrowings (with a focus on anglicisms in Spanish language)",
     long_description_content_type="text/markdown",
     long_description=long_description,
@@ -26,20 +26,30 @@ setup(
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
     ],
     packages=["pylazaro"],
     include_package_data=True,
+    python_requires=">=3.8",
+    # Upper bounds are deliberate. The BiLSTM checkpoints are pickles that reference
+    # flair.embeddings.token.BPEmbSerializable, which was removed in flair 0.14, and
+    # flair < 0.14 in turn calls torch.load() without weights_only=False (the default
+    # flipped in torch 2.6) and does not import against transformers >= 4.46.
     install_requires=[
-        "transformers",
-        "flair",
+        "transformers>=4.30,<4.46",
+        "flair>=0.12,<0.14",
         "attrs",
-        "torch",
-        "torchvision",
-        "spacy",
+        "torch>=1.13,<2.6",
+        "spacy>=3.2,<4",
         "python-crfsuite",
-        "quickvec",
+        "quickvec>=0.2",
+        "numpy",
+        "regex",
+        "requests",
+        "tqdm",
     ],
 )

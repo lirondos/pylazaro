@@ -1,6 +1,4 @@
 import logging
-import os
-import pathlib
 
 import attr
 
@@ -17,11 +15,6 @@ logging.getLogger("flair").setLevel(logging.ERROR)
 logging.getLogger("numpy").setLevel(logging.ERROR)
 logging.getLogger("gensim").setLevel(logging.ERROR)
 logging.getLogger("filelock").setLevel(logging.ERROR)
-logging.basicConfig(level=logging.INFO)
-
-if os.name == "nt":
-    temp = pathlib.PosixPath
-    pathlib.PosixPath = pathlib.WindowsPath
 
 
 @attr.s
@@ -74,7 +67,7 @@ class Lazaro(object):
                 This can be a string or a list of words (if the text is already tokenized)
 
         Returns:
-                `pylazaro.classifiers.LazaroOutput`: The LazaroOutput object that contains the output produced by Lazaro tagger (the output where the automatic detection of borrowings is stored)
+                `pylazaro.output.LazaroOutput`: The LazaroOutput object that contains the output produced by Lazaro tagger (the output where the automatic detection of borrowings is stored)
 
         Example:
                 .. code-block:: python
@@ -83,8 +76,8 @@ class Lazaro(object):
                         >>> tagger = Lazaro()
                         >>> text = "Fue un look sencillo. Se celebra un festival de 'anime'."
                         >>> output = tagger.analyze(text)
-                        >>> output.borrowings()
-                        [('look', 'ENG'), ('anime', 'OTHER')]`
+                        >>> output.borrowings_to_tuple()
+                        [('look', 'ENG'), ('anime', 'OTHER')]
 
         """
 

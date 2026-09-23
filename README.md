@@ -30,7 +30,11 @@ A working example on how to detect borrowings in a text using `pylazaro`:
 
 # We get results
 >>> result.borrowings_to_tuple()
-[('blockchain', 'en'), ('e-mobility', 'en'), ('smarts grids', 'en')]
+[('blockchain', 'ENG'), ('e-mobility', 'ENG'), ('smarts grids', 'ENG')]
+
+# Borrowings from English are labelled ENG, borrowings from other languages OTHER
+>>> result.anglicisms_to_tuple()
+[('blockchain', 'ENG'), ('e-mobility', 'ENG'), ('smarts grids', 'ENG')]
 
 >>> result.tag_per_token()
 [('Inteligencia', 'O'), ('artificial', 'O'), ('aplicada', 'O'), ('al', 'O'), ('sector', 'O'), ('del', 'O'), ('blockchain', 'B-ENG'), (',', 'O'), ('la', 'O'), ('e-mobility', 'B-ENG'), ('y', 'O'), ('las', 'O'), ('smarts', 'B-ENG'), ('grids', 'I-ENG'), ('entre', 'O'), ('otros', 'O'), (';', 'O'), ('favoreciendo', 'O'), ('las', 'O'), ('interacciones', 'O'), ('colaborativas', 'O'), ('.', 'O')]

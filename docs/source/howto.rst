@@ -20,9 +20,9 @@ Here is a minimal example of how to use  ``pylazaro``:
 >>> text = "Inteligencia artificial aplicada al sector del blockchain, la e-mobility y las smarts grids entre otros; favoreciendo las interacciones colaborativas."
 >>> result = tagger.analyze(text)
 >>> result.borrowings_to_tuple()
-[('blockchain', 'en'), ('e-mobility', 'en'), ('smarts grids', 'en')]
->>> output.borrowings_to_dict()
-[{'borrowing': 'blockchain', 'language': 'en', 'start_pos': 6, 'end_pos': 7}, {'borrowing': 'e-mobility', 'language': 'en', 'start_pos': 9, 'end_pos': 10}, {'borrowing': 'smarts grids', 'language': 'en', 'start_pos': 12, 'end_pos': 14}]
+[('blockchain', 'ENG'), ('e-mobility', 'ENG'), ('smarts grids', 'ENG')]
+>>> result.borrowings_to_dict()
+[{'borrowing': 'blockchain', 'language': 'ENG', 'start_pos': 6, 'end_pos': 7}, {'borrowing': 'e-mobility', 'language': 'ENG', 'start_pos': 9, 'end_pos': 10}, {'borrowing': 'smarts grids', 'language': 'ENG', 'start_pos': 12, 'end_pos': 14}]
 >>> result.tag_per_token()
 [('Inteligencia', 'O'), ('artificial', 'O'), ('aplicada', 'O'), ('al', 'O'), ('sector', 'O'), ('del', 'O'), ('blockchain', 'B-ENG'), (',', 'O'), ('la', 'O'), ('e-mobility', 'B-ENG'), ('y', 'O'), ('las', 'O'), ('smarts', 'B-ENG'), ('grids', 'I-ENG'), ('entre', 'O'), ('otros', 'O'), (';', 'O'), ('favoreciendo', 'O'), ('las', 'O'), ('interacciones', 'O'), ('colaborativas', 'O'), ('.', 'O')]
 
@@ -39,9 +39,9 @@ Running ``pylazaro`` with other models
 By default, ``pylazaro`` will use the first model (BiLSTM-CRF with codeswitched embeddings), which is the best-performing model of all, but this can be modified when instantiating :class:`pylazaro.lazaro.Lazaro`:
 
 >>> tagger_bilstm = Lazaro(model_type = 'bilstm', model_file="lirondos/anglicisms-spanish-flair-cs") # Equivalent to tagger_bilstm = Lazaro() and to tagger_bilstm = Lazaro(model_type = 'bilstm')
->>> tagger_bilstm = Lazaro(model_type = 'bilstm', model_file="lirondos/anglicisms-spanish-flair-bert-beto")
->>> tagger_bilstm = Lazaro(model_type = 'transformers', model_file="lirondos/anglicisms-spanish-mbert") # Equivalent to tagger_transformers = Lazaro(model_type = 'transformers')
->>> tagger_bilstm = Lazaro(model_type = 'transformers', model_file="lirondos/anglicisms-spanish-beto")
+>>> tagger_bilstm_beto = Lazaro(model_type = 'bilstm', model_file="lirondos/anglicisms-spanish-flair-bert-beto")
+>>> tagger_transformers = Lazaro(model_type = 'transformers', model_file="lirondos/anglicisms-spanish-beto") # Equivalent to tagger_transformers = Lazaro(model_type = 'transformers')
+>>> tagger_transformers_mbert = Lazaro(model_type = 'transformers', model_file="lirondos/anglicisms-spanish-mbert")
 >>> tagger_crf = Lazaro(model_type = 'crf') # Requires extended installation
 
 .. warning::
