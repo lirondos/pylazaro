@@ -45,3 +45,17 @@ A working example on how to detect borrowings in a text using `pylazaro`:
 * The code is available on [GitHub](https://github.com/lirondos/pylazaro).
 * `pylazaro` gives access to the models described on [this ACL paper](https://aclanthology.org/2022.acl-long.268/)
 * Questions? Bugs? Requests? Ideas? Feel free to reach me [via email](mailto:ealvarezmellado@gmail.com), open [a GitHub issue](https://github.com/lirondos/pylazaro/issues) or ping me [on Twitter](https://twitter.com/lirondos).
+
+### How to cite
+You can cite `pylazaro` with the following reference: 
+```
+@misc{alvarezmellado2026pylazaropythonpackageanglicism,
+      title={pylazaro: a Python package for anglicism extraction in Spanish}, 
+      author={Elena Alvarez-Mellado},
+      year={2026},
+      eprint={2609.29276},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2609.29276}, 
+}
+```
